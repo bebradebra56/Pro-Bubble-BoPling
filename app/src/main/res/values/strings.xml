@@ -1,0 +1,43 @@
+<resources>
+    <string name="app_name">Pro Bubble BoPling</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="expenses">Expenses</string>
+    <string name="eggs">Eggs</string>
+    <string name="statistics">Statistics</string>
+
+    <string name="title_home">Главная</string>
+    <string name="title_statistics">Статистика</string>
+    <string name="title_goals">Цели</string>
+    <string name="title_video_analysis">Видео анализ</string>
+    <string name="title_profile">Профиль</string>
+
+    <string name="save">Сохранить</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="edit">Редактировать</string>
+    <string name="add">Добавить</string>
+
+    <string name="average_score">Средний счет</string>
+    <string name="best_game">Лучшая игра</string>
+    <string name="games_played">Сыграно игр</string>
+    <string name="strike_percentage">Процент страйков</string>
+    <string name="spare_percentage">Процент спэаров</string>
+    <string name="split_conversion">Конверсия сплитов</string>
+
+    <string name="create_new_goal">Создать новую цель</string>
+    <string name="goal_title">Название цели</string>
+    <string name="goal_description">Описание</string>
+    <string name="goal_target">Целевое значение</string>
+    <string name="goal_type">Тип цели</string>
+    <string name="goal_deadline">Дедлайн</string>
+
+    <string name="add_video_analysis">Добавить видео анализ</string>
+    <string name="video_title">Название видео</string>
+    <string name="video_description">Описание</string>
+    <string name="video_notes">Заметки</string>
+    <string name="add_marker">Добавить маркер</string>
+
+    <string name="export_pdf">Экспорт в PDF</string>
+    <string name="share_stats">Поделиться статистикой</string>
+    <string name="edit_profile">Редактировать профиль</string>
+</resources>

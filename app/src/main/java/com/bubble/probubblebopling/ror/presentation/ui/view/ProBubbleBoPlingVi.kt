@@ -1,0 +1,168 @@
+package com.bubble.probubblebopling.ror.presentation.ui.view
+
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Message
+import android.util.Log
+import android.view.Window
+import android.view.WindowManager
+import android.webkit.CookieManager
+import android.webkit.PermissionRequest
+import android.webkit.URLUtil
+import android.webkit.ValueCallback
+import android.webkit.WebResourceRequest
+import android.webkit.WebSettings
+import android.webkit.WebView
+import android.widget.FrameLayout
+import android.widget.Toast
+
+class ProBubbleBoPlingVi(
+    private val chickenContext: Context,
+    private val proBubbleBoPlingCallback: ProBubbleBoPlingCallBack,
+    private val chickenWindow: Window
+) : android.webkit.WebView(chickenContext) {
+    private var fileChooserHandler: ((ValueCallback<Array<Uri>>?) -> Unit)? = null
+
+    fun setFileChooserHandler(handler: (ValueCallback<Array<Uri>>?) -> Unit) {
+        this.fileChooserHandler = handler
+    }
+    init {
+        val webSettings = settings
+        webSettings.apply {
+            setSupportMultipleWindows(true)
+            allowFileAccess = true
+            allowContentAccess = true
+            domStorageEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true
+            userAgentString = WebSettings.getDefaultUserAgent(chickenContext).replace("; wv)", "").replace("Version/4.0 ", "")
+            @SuppressLint("SetJavaScriptEnabled")
+            javaScriptEnabled = true
+            cacheMode = WebSettings.LOAD_NO_CACHE
+        }
+        isNestedScrollingEnabled = true
+
+
+
+        layoutParams = FrameLayout.LayoutParams(
+            LayoutParams.MATCH_PARENT,
+            LayoutParams.MATCH_PARENT
+        )
+
+        super.setWebViewClient(object : android.webkit.WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?,
+            ): Boolean {
+                val link = request?.url?.toString() ?: ""
+
+                return if (request?.isRedirect == true) {
+                    view?.loadUrl(request?.url.toString())
+                    true
+                }
+                else if (URLUtil.isNetworkUrl(link)) {
+                    false
+                } else {
+                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                    try {
+                        chickenContext.startActivity(intent)
+                    } catch (e: Exception) {
+                        Toast.makeText(chickenContext, "This application not found", Toast.LENGTH_SHORT).show()
+                    }
+                    true
+                }
+//                else if(link.startsWith("intent")){
+//                    todoSphereIntentStart(link)
+//                    true
+//                } else {
+//                    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
+//                    try {
+//                        todoSphereContext.startActivity(intent)
+//                    } catch (e: Exception) {
+//                        Toast.makeText(todoSphereContext, "This application not found", Toast.LENGTH_SHORT).show()
+//                    }
+//                    true
+//                }
+            }
+
+
+            override fun onPageFinished(view: WebView?, url: String?) {
+                CookieManager.getInstance().flush()
+                proBubbleBoPlingCallback.chickenOnFirstPageFinished()
+                if (url?.contains("ninecasino") == true) {
+                    _root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.chickenInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+                    Log.d(_root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.CHICKEN_MAIN_TAG, "onPageFinished : ${_root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.chickenInputMode}")
+                    chickenWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+                } else {
+                   _root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.chickenInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    Log.d(_root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.CHICKEN_MAIN_TAG, "onPageFinished : ${_root_ide_package_.com.bubble.probubblebopling.ror.presentation.app.ProBubbleBoPlingApp.Companion.chickenInputMode}")
+                    chickenWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                }
+            }
+
+
+        })
+
+        super.setWebChromeClient(object : android.webkit.WebChromeClient() {
+            override fun onPermissionRequest(request: PermissionRequest?) {
+                proBubbleBoPlingCallback.chickenOnPermissionRequest(request)
+            }
+
+            override fun onShowFileChooser(
+                webView: WebView?,
+                filePathCallback: ValueCallback<Array<Uri>>?,
+                fileChooserParams: FileChooserParams?,
+            ): Boolean {
+                fileChooserHandler?.invoke(filePathCallback)
+                return true
+            }
+            override fun onCreateWindow(
+                view: WebView?,
+                isDialog: Boolean,
+                isUserGesture: Boolean,
+                resultMsg: Message?
+            ): Boolean {
+                chickenHandleCreateWebWindowRequest(resultMsg)
+                return true
+            }
+        })
+    }
+
+
+    fun chickenFLoad(link: String) {
+        super.loadUrl(link)
+    }
+
+    private fun chickenHandleCreateWebWindowRequest(resultMsg: Message?) {
+        if (resultMsg == null) return
+        if (resultMsg.obj != null && resultMsg.obj is WebViewTransport) {
+            val transport = resultMsg.obj as WebViewTransport
+            val windowWebView = ProBubbleBoPlingVi(chickenContext, proBubbleBoPlingCallback, chickenWindow)
+            transport.webView = windowWebView
+            resultMsg.sendToTarget()
+            proBubbleBoPlingCallback.chickenHandleCreateWebWindowRequest(windowWebView)
+        }
+    }
+
+//    private fun todoSphereIntentStart(link: String) {
+//        var scheme = ""
+//        var token = ""
+//        val part1 = link.split("#").first()
+//        val part2 = link.split("#").last()
+//        token = part1.split("?").last()
+//        part2.split(";").forEach {
+//            if (it.startsWith("scheme")) {
+//                scheme = it.split("=").last()
+//            }
+//        }
+//        val finalUriString = "$scheme://receiveetransfer?$token"
+//        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(finalUriString))
+//        try {
+//            todoSphereContext.startActivity(intent)
+//        } catch (e: Exception) {
+//            Toast.makeText(todoSphereContext, "This application not found", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "780723074646",
+    "project_id": "probubblebopling",
+    "storage_bucket": "probubblebopling.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:780723074646:android:489087d3e051ff6278adf7",
+        "android_client_info": {
+          "package_name": "com.bubble.probubblebopling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCflp44fnjflRQ-VLtVLjpiMVoTq0IhIQ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
